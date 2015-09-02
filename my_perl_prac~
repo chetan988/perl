@@ -1,0 +1,527 @@
+example of multiline comment in perl
+#!/usr/bin/perl
+
+print "hello world!!!\n";
+
+=begin
+
+this part
+supports 
+multiline comment
+=end
+
+output:
+hello world!!!
+
+======================
+printing on console in perl
+=======================
+
+#!/usr/bin/perl
+$a = 10;
+print "Value of a = $a\n"; # will manipulate the content
+print 'Value of a = $a\n'; # blindly dump the content to console
+This will produce following result:
+Value of a = 10
+Value of a = $a\n$
+
+another eample:
+
+#!/usr/bin/perl
+$a = 10;
+$var = <<"EOF";
+This is the syntax for here document and it will continue
+until it encounters a EOF in the first line.
+This is case of double quote so variable value will be
+interpolated. For example value of a = $a
+EOF
+print "$var\n";
+$var = <<'EOF';
+This is case of single quote so variable value will be
+interpolated. For example value of a = $a
+EOF
+print "$var\n";
+
+
+This will produce following result:
+
+This is the syntax for here document and it will continue
+until it encounters a EOF in the first line.
+This is case of double quote so variable value will be
+interpolated. For example value of a = 10
+This is case of single quote so variable value will be
+interpolated. For example value of a = $a
+
+===================
+data type
+===================
+
+perl is loosely typed program language meaning it does not required to declare data type before assigning a value to a variable.
+
+example:
+
+#/usr/bin/perl
+
+$a = 10;
+printa($a);
+$a = "chetan";
+printa($a);
+$a=2.10;
+printa($a);
+
+sub printa {
+$val = shift;
+print "value of a is $a \n";
+
+}
+
+------
+output
+------
+
+value of a is 10
+value of a is chetan
+value of a is 2.1
+
+so $a is not tightly coupled with any data type.
+
+
+Q. how to get the data type in perl:
+
+
+
+======================
+variable type in perl
+======================
+
+1 Scalar:
+Scalars are simple variables. They are preceded by a dollar sign ($). A scalar is either a number, a string,
+or a reference. 
+2 Arrays:
+Arrays are ordered lists of scalars that you access with a numeric index which starts with 0. They are
+preceded by an "at" sign (@).
+3 Hashes:
+Hashes are unordered sets of key/value pairs that you access using the keys as subscripts. They are
+preceded by a percent sign (%).
+
+
+====================
+string literal
+====================
+
+\u Force next character to uppercase
+\l Force next character to lowercase
+\U Force all following characters to uppercase
+\L Force all following characters to lowercase
+\Q Backslash all following non-alphanumeric characters
+\E End \U, \L, or \Q
+
+======================
+more about variable
+======================
+
+1. scalar
+===========
+
+$name="chetan"; # string scalar
+$value=10;  # int scalar
+$value_float = 20.2; #float scalar
+
+operation allowed on scalar:
+------------------------------
+
+* arithmatic operations can be applied on two int or float scalar.
+$value = $value+20;
+
+* two string scalar can be concartinated.
+
+$name = $firt_name . " " . $last_name;
+
+Note: . is used to concardinate two string
+
+* a string and int can be concadinate
+
+$rept = $name . $value
+
+this will result chetan30.
+
+===================
+special literal
+===================
+
+chetan@CHETAN:~/code_prac/perl$ cat special_literal.pl 
+#!/usr/bin/perl
+print "File name ". __FILE__ . "\n"; 
+print "Line Number " . __LINE__ ."\n";
+print "Package " . __PACKAGE__ ."\n";
+# they can not be interpolated
+print "__FILE__ __LINE__ __PACKAGE__\n";
+
+
+chetan@CHETAN:~/code_prac/perl$ perl special_literal.pl 
+File name special_literal.pl
+Line Number 3
+Package main
+__FILE__ __LINE__ __PACKAGE__
+chetan@CHETAN:~/code_prac/perl$ 
+
+
+2. arrays
+==============
+
+
+#! /usr/bin/perl
+
+
+# array can store mix data type value
+
+@mix_data = (1,2,3,'chetan','das');
+
+# we can specify a range of int in array
+
+@int_range = (5..10); 
+
+# we can save letter
+
+@char_range = (d..h);
+
+#we can use space to create a array
+
+@array_by_space = qw/ sunday monday tuesday wednessday thrusday/;
+
+# printing an array without control
+
+print "mix_data array contain  @mix_data\n";
+
+print "\nint_range array contain  @int_range\n";
+
+# printing array in control way
+
+foreach (@char_range)
+ { print "data= $_\n"; }
+
+# another way of control printing
+   foreach $temp (@array_by_space)
+    {
+      print "day = $temp\n";
+    }
+
+# various way to get size of array
+
+$size = @mix_data; # auto conversion
+
+$size_1 = scalar(@mix_data); #scalar convert array to its size
+
+$size_2 = $#mix_data+1;  # $#mix_data will give the max index of array 
+
+print "size = $size\tsize_1 = $size_1\tsize_2 = $size_2\n";
+
+# splicing of array i.e cut the array to small pieces
+
+@first_three_day = @array_by_space[0,1,3];
+
+print "sliced array = @first_three_day\n";
+
+# actions on a array
+
+#1. push: enter an element at the end
+
+push(@array_by_space,'friday');
+
+#pop : remove one element from array from last
+
+$day = pop(@array_by_space);
+
+#shift : remove one element from front end/begining
+
+$day_1 = shift(@array_by_space);
+
+#unshift : put the element in the front
+
+unshift(@array_by_space,'sunday');
+
+print "poped day : $day\nshifted day: $day_1\n after pushed and unshift array restored to @array_by_space\n";
+
+#splicing is to replace array element: splice(@array,offset,number of element to change,values);
+
+splice(@int_range,1,3,11,13,15);
+print "after splicing array changed to @int_range\n";
+
+#convering a string to array:
+
+$days = 'sunday,monday,tuesday,wednesday,thrusday,friday,saturday';
+@week = split(',',$days);
+
+print "$days split into array as @week\n";
+
+#spliting with two different syntax
+$value_pair = 'monday#1,tuesday#1-2,thrusday#4-5-6';
+
+@days = split(/[,#]/,$value_pair);
+
+print "after spliting array is @days\n";
+
+
+#transforming array to string
+
+$days = join(',',map{'"'. $_ .'"'}@week);
+
+print "after join days = $days\n";
+
+
+# merging two array
+
+@int_char_range = (@int_range,@char_range);
+
+print "after merging the array is @int_char_range\n";
+
+
+-------
+output
+-------
+
+
+mix_data array contain  1 2 3 chetan das
+
+int_range array contain  5 6 7 8 9 10
+data= d
+data= e
+data= f
+data= g
+data= h
+day = sunday
+day = monday
+day = tuesday
+day = wednessday
+day = thrusday
+size = 5	size_1 = 5	size_2 = 5
+
+sliced array = sunday monday wednessday
+
+poped day : friday
+
+shifted day: sunday
+
+ after pushed and unshift array restored to sunday monday tuesday 
+wednessday thrusday
+
+after splicing array changed to 5 11 13 15 9 10
+
+sunday,monday,tuesday,wednesday,thrusday,friday,saturday split into 
+array as sunday monday tuesday wednesday thrusday friday saturday
+
+after spliting array is monday 1 tuesday 1-2 thrusday 4-5-6
+after join days = "sunday","monday","tuesday","wednesday","thrusday","friday","saturday"
+
+after merging the array is 5 11 13 15 9 10 d e f g h
+
+
+====================================
+hash
+=====================================
+
+we will see different ways of creating hash
+
+1. %age = ("chetan", 25,"swapna",28,"sarit",27));   
+
+here key is chetan,swapna,sarit and values are 25,28,27
+
+the value 25 is bound to chetan, 28 to swapna and 27 to sarit
+
+2. we can just create a hash and add element latter
+
+my %age;
+
+age{"chetan"}=25;
+age{"sarit"}=27;
+age{"swapna"}=28;
+
+NOTE: as the value are bind with key so the order of declaration does not matter and also while retrival 
+we can expect hash to return element in the order we declare (not like array) we will se that with example.
+
+3. %age = ("chetan" => 25,"swapna"=>28,"sarit"=>27));
+
+same as option 1 but make more sense
+
+
+now how to print whole hash and access indivisual elemnt:
+------------------------------------------------------------
+ex-1
+
+ my %age = ("chetan", 25,"swapna",28,"sarit",27);
+
+print " printing individual age record in the hash:\n";
+print "chetan = $age{\"chetan\"}\nswapna=$age{\"swapna\"}\nsarit=$age{\"sarit\"}\n";
+
+------
+output
+-------
+ printing individual age record in the hash:
+chetan = 25
+swapna=28
+sarit=27
+
+ex-2
+
+foreach $key (keys%age) {
+   print "$key=>$age{$key}\n";
+}
+
+-------
+output
+-------
+chetan=>25
+swapna=>28
+sarit=>27
+
+
+ex-3
+
+while (($key,$value) = each(%age)) {
+		print "$key => $value\n";
+
+}
+
+swapna => 28
+sarit => 27
+chetan => 25
+
+NOTE: each time we print with different process the sequese changes this is the order in which hash got extracted is not uniform
+now extracting keys and values and checking the size of hash
+-----------------------------------------------------------
+
+@name = keys%age;
+@age = values%age;
+$size = scalar(@name);
+
+print "names are = @name\nage=@age\nsize of hash = $size\n";
+
+names are = chetan sarit swapna
+age=25 27 28
+size of hash = 3
+
+Question: i have a array with multiple value how can I extract a unique values:
+
+Ans:  This can be achieved very easily through hash. As hash is uniqly mapped on keys so just put all array as hash key.
+
+@repetative_array=(1,2,3,1,5,3,2,6,7,3,1,4,5,0,0,8);
+%temp_hash;
+foreach $key (@repetative_array) {
+		if(exists($temp_hash{$key})) {
+  				$temp_hash{$key}++;
+		}
+		else {
+				$temp_hash{$key} =1;
+		}
+}
+
+@unique_array = keys%temp_hash;
+
+while(($key,$value) = each(%temp_hash)) {
+	print "$key repeated : $value\n";
+}
+
+print "unique array = @unique_array\n";
+@unique_array = sort(keys%temp_hash);
+print "now sorting the array: @unique_array\n";
+
+
+-------
+output
+-------
+
+0 repeated : 2
+6 repeated : 1
+4 repeated : 1
+5 repeated : 2
+8 repeated : 1
+3 repeated : 3
+2 repeated : 2
+1 repeated : 3
+7 repeated : 1
+unique array = 0 6 4 5 8 3 2 1 7
+now sorting the array: 0 1 2 3 4 5 6 7 8
+
+question: check if a value exist in the hash?
+
+Ans: search in the keys:
+
+if(grep {/chetan/} keys%age) {
+   print "chetan exist in the age\n";
+}
+
+# this can be done in another way
+
+if(exists($age{"chetan"})) {
+    print "chetan exist in the age\n";
+}
+
+# but for values we can not use exists so grep is only method example
+
+if(grep {/25/} values%age) {
+	print " we have a 25 yr gentleman\n";
+}
+
+# negative testcase
+
+if(scalar (grep {/abhi/ } keys%age)>0) {
+   print "chetan exist in the age\n";
+}
+else {
+   print "cheta is not here\n";
+}
+
+# this can be done in another way
+
+if(exists($age{"cheta"})) {
+    print "cheta exist in the age\n";
+}
+else {
+   print "cheta is not here\n";
+}
+
+# but for values we can not use exists so grep is only method example
+
+if(grep /30/,values%age) {
+	print " we have a 30 yr gentleman\n";
+}
+else {
+   print "we do not have 30 yr old man\n";
+}
+
+-------
+output
+-------
+
+chetan exist in the age
+chetan exist in the age
+ we have a 25 yr gentleman
+cheta is not here
+cheta is not here
+we do not have 30 yr old man
+
+================
+conditions
+================
+
+supports: if..elsif...else, switch, unless .. elsif..else (unless is just opposite of if)
+
+unless(boolean_expression 1){
+# Executes when the boolean expression 1 is false
+}
+elsif( boolean_expression 2){
+# Executes when the boolean expression 2 is true
+}
+elsif( boolean_expression 3){
+# Executes when the boolean expression 3 is true
+}
+else{
+# Executes when the none of the above condition is met
+}
+
+
+
+
+
+
+
